@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { ArrowUp, ImagePlayIcon, User, X } from "lucide-react";
 import Image from "next/image";
 import React from "react";
@@ -22,6 +23,24 @@ function AiThumbnailGenerator() {
       setFaceImagePreview(URL.createObjectURL(selectedFile));
     }
   };
+
+  const onSubmit = async () => {
+    const formData = new FormData()
+    userInput  && formData.append("userInput", userInput);
+    referenceImage && formData.append("refImage", referenceImage);
+    faceImage && formData.append("faceImage", faceImage);
+   // api call
+   const result = await axios.post('/api/generate-thumbnail', formData);
+
+   console.log(result.data);
+
+    // if (result.data.success) {
+    //   alert("Thumbnail generated successfully!");
+    // } else {
+    //   alert("Failed to generate thumbnail. Please try again.");
+    // }
+  }
+
   return (
     <div>
       <div className="px-10 md:px-20 lg:px-40">
@@ -41,8 +60,8 @@ function AiThumbnailGenerator() {
             placeholder="Enter your youtube video title or description"
             className="w-full outline-none bg-transparent"
           />
-          <div className="p-3 bg-gradient-to-t from-red-500 to-orange-500 text-white rounded-full cursor-pointer hover:bg-gradient-to-t hover:from-red-600 hover:to-orange-600">
-            <ArrowUp />
+          <div onClick={onSubmit} className="p-3 bg-gradient-to-t from-red-500 to-orange-500 text-white rounded-full cursor-pointer hover:bg-gradient-to-t hover:from-red-600 hover:to-orange-600">
+            <ArrowUp className=""/>
           </div>
         </div>
         <div className="mt-3 flex gap-3">
